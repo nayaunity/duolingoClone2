@@ -258,8 +258,11 @@ struct ExerciseView: View {
             .padding(.horizontal)
         }
         .onAppear {
-            // Only complete the lesson if we haven't already
-            if !lesson.isCompleted {
+            // Only complete the lesson if we haven't already and student passed
+            let wrongAnswers = shuffledExercises.count - correctAnswers
+            let passedLesson = wrongAnswers <= 1
+            
+            if !lesson.isCompleted && passedLesson {
                 lessonManager.completeLesson(lesson)
             }
         }

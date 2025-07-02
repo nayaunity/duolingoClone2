@@ -14,18 +14,25 @@ struct LessonCompleteView: View {
         Int(Double(correctAnswers) / Double(totalQuestions) * 100)
     }
     
+    var passedLesson: Bool {
+        let wrongAnswers = totalQuestions - correctAnswers
+        return wrongAnswers <= 1
+    }
+    
     var body: some View {
         ZStack {
             // Background gradient
             LinearGradient(
-                colors: [Color.duolingoYellow.opacity(0.3), Color.duolingoBackground],
+                colors: passedLesson ? 
+                    [Color.duolingoYellow.opacity(0.3), Color.duolingoBackground] :
+                    [Color.duolingoOrange.opacity(0.3), Color.duolingoBackground],
                 startPoint: .top,
                 endPoint: .bottom
             )
             .ignoresSafeArea()
             
-            // Confetti
-            if showConfetti {
+            // Confetti (only if passed)
+            if showConfetti && passedLesson {
                 ConfettiView()
             }
             
@@ -33,43 +40,45 @@ struct LessonCompleteView: View {
                 VStack(spacing: 30) {
                     // Trophy and celebration
                     VStack(spacing: 20) {
-                        Image(systemName: "trophy.fill")
+                        Image(systemName: passedLesson ? "trophy.fill" : "arrow.clockwise.circle.fill")
                             .font(.system(size: 120))
-                            .foregroundColor(.duolingoYellow)
+                            .foregroundColor(passedLesson ? .duolingoYellow : .duolingoOrange)
                             .scaleEffect(animateElements ? 1.0 : 0.5)
                             .animation(.duolingoBounce.delay(0.2), value: animateElements)
                         
                         VStack(spacing: 8) {
-                            Text("Lesson Complete!")
+                            Text(passedLesson ? "Lesson Complete!" : "Try Again!")
                                 .font(.duolingoTitle)
                                 .foregroundColor(.duolingoTextPrimary)
                                 .opacity(animateElements ? 1 : 0)
                                 .animation(.duolingoEaseInOut.delay(0.5), value: animateElements)
                             
-                            Text("Excellent work!")
+                            Text(passedLesson ? "Excellent work!" : "You can only have 1 wrong answer to pass")
                                 .font(.duolingoHeadline)
                                 .foregroundColor(.duolingoTextSecondary)
                                 .opacity(animateElements ? 1 : 0)
                                 .animation(.duolingoEaseInOut.delay(0.7), value: animateElements)
                         }
                         
-                        // XP earned
-                        HStack(spacing: 8) {
-                            Image(systemName: "star.fill")
-                                .foregroundColor(.duolingoYellow)
-                                .font(.title2)
-                            
-                            Text("+\(lesson.xpReward) XP")
-                                .font(.duolingoTitle)
-                                .foregroundColor(.duolingoOrange)
-                                .fontWeight(.bold)
+                        // XP earned (only if passed)
+                        if passedLesson {
+                            HStack(spacing: 8) {
+                                Image(systemName: "star.fill")
+                                    .foregroundColor(.duolingoYellow)
+                                    .font(.title2)
+                                
+                                Text("+\(lesson.xpReward) XP")
+                                    .font(.duolingoTitle)
+                                    .foregroundColor(.duolingoOrange)
+                                    .fontWeight(.bold)
+                            }
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 12)
+                            .background(Color.duolingoYellow.opacity(0.2))
+                            .cornerRadius(20)
+                            .scaleEffect(animateElements ? 1.0 : 0.8)
+                            .animation(.duolingoBounce.delay(0.9), value: animateElements)
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
-                        .background(Color.duolingoYellow.opacity(0.2))
-                        .cornerRadius(20)
-                        .scaleEffect(animateElements ? 1.0 : 0.8)
-                        .animation(.duolingoBounce.delay(0.9), value: animateElements)
                     }
                     
                     // Results card
@@ -113,9 +122,9 @@ struct LessonCompleteView: View {
                     
                     // Continue button
                     Button(action: onDismiss) {
-                        Text("Back to Lessons")
+                        Text(passedLesson ? "Back to Lessons" : "Try Again")
                     }
-                    .buttonStyle(DuolingoButtonStyle(color: .duolingoGreen))
+                    .buttonStyle(DuolingoButtonStyle(color: passedLesson ? .duolingoGreen : .duolingoOrange))
                     .opacity(animateElements ? 1 : 0)
                     .animation(.duolingoEaseInOut.delay(1.3), value: animateElements)
                 }
@@ -125,8 +134,10 @@ struct LessonCompleteView: View {
         }
         .onAppear {
             animateElements = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                showConfetti = true
+            if passedLesson {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    showConfetti = true
+                }
             }
         }
     }
