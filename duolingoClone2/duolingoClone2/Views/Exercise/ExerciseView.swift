@@ -22,13 +22,23 @@ struct ExerciseView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
-            headerView
+        ZStack {
+            // Background gradient
+            LinearGradient(
+                colors: [Color.duolingoBackground, Color.white],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
             
-            if let exercise = currentExercise {
-                exerciseContentView(exercise: exercise)
-            } else {
-                lessonCompleteView
+            VStack(spacing: 0) {
+                headerView
+                
+                if let exercise = currentExercise {
+                    exerciseContentView(exercise: exercise)
+                } else {
+                    lessonCompleteView
+                }
             }
         }
         .navigationBarHidden(true)
@@ -45,29 +55,35 @@ struct ExerciseView: View {
     }
     
     private var headerView: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
             HStack {
-                Button(action: {
+                // Close button
+                BouncyButton(action: {
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image(systemName: "xmark")
                         .font(.title2)
-                        .foregroundColor(.primary)
+                        .foregroundColor(.duolingoTextPrimary)
+                        .padding(12)
+                        .background(Color.duolingoCardBackground)
+                        .clipShape(Circle())
+                        .duolingoShadow(radius: 4, y: 2)
                 }
                 
                 Spacer()
                 
+                // Progress indicator
                 Text("\(currentExerciseIndex + 1)/\(lesson.exercises.count)")
-                    .font(.headline)
-                    .fontWeight(.bold)
+                    .font(.duolingoHeadline)
+                    .foregroundColor(.duolingoTextPrimary)
             }
             
-            ProgressView(value: progress)
-                .progressViewStyle(LinearProgressViewStyle(tint: .green))
-                .scaleEffect(x: 1, y: 2, anchor: .center)
+            // Animated progress bar
+            DuolingoProgressBar(progress: progress, height: 12)
         }
-        .padding()
-        .background(Color(.systemBackground))
+        .padding(.horizontal, 20)
+        .padding(.top, 20)
+        .padding(.bottom, 10)
     }
     
     private func exerciseContentView(exercise: Exercise) -> some View {
@@ -98,62 +114,61 @@ struct ExerciseView: View {
     }
     
     private var resultView: some View {
-        VStack(spacing: 16) {
-            HStack {
-                Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
-                    .font(.title)
-                    .foregroundColor(isCorrect ? .green : .red)
-                
-                Text(isCorrect ? "Correct!" : "Incorrect")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(isCorrect ? .green : .red)
-                
-                Spacer()
-            }
-            
-            if !isCorrect, let exercise = currentExercise {
-                Text("Correct answer: \(exercise.correctAnswer)")
-                    .font(.body)
-                    .foregroundColor(.secondary)
-            }
-            
-            Button(action: nextExercise) {
+        SlideInView(delay: 0) {
+            VStack(spacing: 20) {
                 HStack {
-                    Spacer()
-                    Text("Continue")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.white)
+                    Image(systemName: isCorrect ? "checkmark.circle.fill" : "xmark.circle.fill")
+                        .font(.largeTitle)
+                        .foregroundColor(isCorrect ? .duolingoGreen : .duolingoRed)
+                        .scaleEffect(isCorrect ? 1.2 : 1.0)
+                        .animation(.duolingoBounce, value: isCorrect)
+                    
+                    VStack(alignment: .leading) {
+                        Text(isCorrect ? "Excellent!" : "Not quite")
+                            .font(.duolingoTitle)
+                            .foregroundColor(isCorrect ? .duolingoGreen : .duolingoRed)
+                        
+                        if !isCorrect, let exercise = currentExercise {
+                            Text("Correct answer: \(exercise.correctAnswer)")
+                                .font(.duolingoBody)
+                                .foregroundColor(.duolingoTextSecondary)
+                        }
+                    }
+                    
                     Spacer()
                 }
-                .padding()
-                .background(isCorrect ? Color.green : Color.red)
-                .cornerRadius(12)
+                
+                Button(action: nextExercise) {
+                    Text("Continue")
+                        .font(.duolingoBodyBold)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 16)
+                        .background(isCorrect ? Color.duolingoGreen : Color.duolingoRed)
+                        .cornerRadius(16)
+                        .duolingoButtonShadow(color: isCorrect ? Color.duolingoGreen.opacity(0.3) : Color.duolingoRed.opacity(0.3))
+                }
+                .buttonStyle(DuolingoButtonStyle(color: isCorrect ? .duolingoGreen : .duolingoRed))
             }
+            .padding(24)
+            .background(Color.duolingoCardBackground)
+            .cornerRadius(20)
+            .duolingoShadow()
+            .padding(.horizontal, 20)
         }
-        .padding()
-        .background(Color(.systemGray6))
-        .cornerRadius(12)
-        .padding(.horizontal)
     }
     
     private var checkAnswerButton: some View {
         Button(action: checkAnswer) {
-            HStack {
-                Spacer()
-                Text("Check Answer")
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                Spacer()
-            }
-            .padding()
-            .background(selectedAnswer.isEmpty ? Color.gray : Color.blue)
-            .cornerRadius(12)
+            Text("Check Answer")
         }
+        .buttonStyle(DuolingoButtonStyle(
+            color: .duolingoGreen,
+            isEnabled: !selectedAnswer.isEmpty
+        ))
         .disabled(selectedAnswer.isEmpty)
-        .padding(.horizontal)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 30)
     }
     
     private var lessonCompleteView: some View {
