@@ -87,9 +87,17 @@ struct UnitView: View {
     private var unitDescription: String {
         switch unit {
         case 1:
-            return "Learn basic greetings and family words"
+            return "Master the basics: greetings, family, numbers, colors, and body parts"
         case 2:
-            return "Explore colors and everyday vocabulary"
+            return "Daily life essentials: food, household items, and clothing"
+        case 3:
+            return "Express time and weather: days, seasons, and describing conditions"
+        case 4:
+            return "Action words: essential verbs and daily activities"
+        case 5:
+            return "Navigate the world: places, transportation, and directions"
+        case 6:
+            return "Shopping and commerce: money, buying, and selling"
         default:
             return "Continue your Shona journey"
         }
