@@ -90,3 +90,44 @@ enum ExerciseType: String, CaseIterable, Codable {
     case matchPairs = "Match Pairs"
     case listenAndRepeat = "Listen and Repeat"
 }
+
+// MARK: - Exercise Extensions
+extension Exercise {
+    /// Returns a new exercise with shuffled options
+    func withShuffledOptions() -> Exercise {
+        guard let options = self.options, !options.isEmpty else {
+            return self
+        }
+        
+        // Create a new array with shuffled options
+        let shuffledOptions = options.shuffled()
+        
+        return Exercise(
+            type: self.type,
+            question: self.question,
+            correctAnswer: self.correctAnswer,
+            options: shuffledOptions,
+            shonaText: self.shonaText,
+            englishText: self.englishText,
+            audioFileName: self.audioFileName
+        )
+    }
+    
+    /// Returns options with the correct answer guaranteed to be included and shuffled
+    func getShuffledOptionsWithCorrectAnswer() -> [String] {
+        guard let options = self.options else { return [] }
+        
+        // Ensure correct answer is in the options (in case it's not)
+        var allOptions = options
+        if !allOptions.contains(correctAnswer) {
+            // If correct answer isn't in options, replace the first option with it
+            if !allOptions.isEmpty {
+                allOptions[0] = correctAnswer
+            } else {
+                allOptions.append(correctAnswer)
+            }
+        }
+        
+        return allOptions.shuffled()
+    }
+}

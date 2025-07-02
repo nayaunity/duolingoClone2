@@ -11,14 +11,29 @@ struct ExerciseView: View {
     @State private var isCorrect = false
     @State private var correctAnswers = 0
     @State private var showLessonComplete = false
+    @State private var shuffledExercises: [Exercise] = []
+    
+    init(lesson: Lesson, lessonManager: LessonManager) {
+        self.lesson = lesson
+        self.lessonManager = lessonManager
+        
+        // Initialize shuffled exercises immediately
+        self._shuffledExercises = State(initialValue: lesson.exercises.map { exercise in
+            exercise.withShuffledOptions()
+        })
+    }
     
     var currentExercise: Exercise? {
-        lesson.exercises.indices.contains(currentExerciseIndex) ? lesson.exercises[currentExerciseIndex] : nil
+        shuffledExercises.indices.contains(currentExerciseIndex) ? shuffledExercises[currentExerciseIndex] : nil
     }
     
     var progress: Double {
-        guard !lesson.exercises.isEmpty else { return 0 }
-        return Double(currentExerciseIndex) / Double(lesson.exercises.count)
+        guard !shuffledExercises.isEmpty else { return 0 }
+        return Double(currentExerciseIndex) / Double(shuffledExercises.count)
+    }
+    
+    var hasCompletedAllExercises: Bool {
+        return !shuffledExercises.isEmpty && currentExerciseIndex >= shuffledExercises.count
     }
     
     var body: some View {
@@ -36,8 +51,42 @@ struct ExerciseView: View {
                 
                 if let exercise = currentExercise {
                     exerciseContentView(exercise: exercise)
-                } else {
+                } else if hasCompletedAllExercises {
                     lessonCompleteView
+                } else {
+                    // This happens when there are no exercises in the lesson
+                    VStack(spacing: 20) {
+                        Spacer()
+                        
+                        Image(systemName: "questionmark.circle")
+                            .font(.system(size: 60))
+                            .foregroundColor(.duolingoGrayMedium)
+                        
+                        Text("No exercises available")
+                            .font(.duolingoHeadline)
+                            .foregroundColor(.duolingoTextPrimary)
+                        
+                        Text("This lesson doesn't have any exercises yet.")
+                            .font(.duolingoBody)
+                            .foregroundColor(.duolingoTextSecondary)
+                            .multilineTextAlignment(.center)
+                        
+                        Button(action: {
+                            presentationMode.wrappedValue.dismiss()
+                        }) {
+                            Text("Go Back")
+                                .font(.duolingoBodyBold)
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 16)
+                                .background(Color.duolingoBlue)
+                                .cornerRadius(16)
+                        }
+                        .padding(.horizontal, 40)
+                        
+                        Spacer()
+                    }
+                    .padding()
                 }
             }
         }
@@ -46,7 +95,7 @@ struct ExerciseView: View {
             LessonCompleteView(
                 lesson: lesson,
                 correctAnswers: correctAnswers,
-                totalQuestions: lesson.exercises.count,
+                totalQuestions: shuffledExercises.count,
                 lessonManager: lessonManager
             ) {
                 presentationMode.wrappedValue.dismiss()
@@ -73,7 +122,7 @@ struct ExerciseView: View {
                 Spacer()
                 
                 // Progress indicator
-                Text("\(currentExerciseIndex + 1)/\(lesson.exercises.count)")
+                Text("\(currentExerciseIndex + 1)/\(shuffledExercises.count)")
                     .font(.duolingoHeadline)
                     .foregroundColor(.duolingoTextPrimary)
             }
@@ -207,7 +256,10 @@ struct ExerciseView: View {
             .padding(.horizontal)
         }
         .onAppear {
-            lessonManager.completeLesson(lesson)
+            // Only complete the lesson if we haven't already
+            if !lesson.isCompleted {
+                lessonManager.completeLesson(lesson)
+            }
         }
     }
     
@@ -227,6 +279,7 @@ struct ExerciseView: View {
         showResult = false
         isCorrect = false
     }
+    
 }
 
 
