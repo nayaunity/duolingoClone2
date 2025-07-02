@@ -113,7 +113,7 @@ struct LessonCompleteView: View {
                     
                     // Continue button
                     Button(action: onDismiss) {
-                        Text("Continue Learning")
+                        Text("Back to Lessons")
                     }
                     .buttonStyle(DuolingoButtonStyle(color: .duolingoGreen))
                     .opacity(animateElements ? 1 : 0)

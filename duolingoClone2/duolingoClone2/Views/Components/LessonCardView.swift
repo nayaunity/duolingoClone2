@@ -6,7 +6,7 @@ struct LessonCardView: View {
     @State private var isPressed = false
     
     var body: some View {
-        NavigationLink(destination: LessonDetailView(lesson: lesson, lessonManager: lessonManager)) {
+        NavigationLink(value: lesson) {
             VStack(spacing: 12) {
                 // Animated lesson circle
                 AnimatedLessonCircle(lesson: lesson, size: 80)

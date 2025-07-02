@@ -3,6 +3,7 @@ import SwiftUI
 struct ExerciseView: View {
     let lesson: Lesson
     @ObservedObject var lessonManager: LessonManager
+    let onDismissToHome: () -> Void
     @Environment(\.presentationMode) var presentationMode
     
     @State private var currentExerciseIndex = 0
@@ -13,9 +14,10 @@ struct ExerciseView: View {
     @State private var showLessonComplete = false
     @State private var shuffledExercises: [Exercise] = []
     
-    init(lesson: Lesson, lessonManager: LessonManager) {
+    init(lesson: Lesson, lessonManager: LessonManager, onDismissToHome: @escaping () -> Void) {
         self.lesson = lesson
         self.lessonManager = lessonManager
+        self.onDismissToHome = onDismissToHome
         
         // Initialize shuffled exercises immediately
         self._shuffledExercises = State(initialValue: lesson.exercises.map { exercise in
@@ -98,7 +100,7 @@ struct ExerciseView: View {
                 totalQuestions: shuffledExercises.count,
                 lessonManager: lessonManager
             ) {
-                presentationMode.wrappedValue.dismiss()
+                dismissToHome()
             }
         }
     }
@@ -280,6 +282,16 @@ struct ExerciseView: View {
         isCorrect = false
     }
     
+    private func dismissToHome() {
+        // First dismiss the lesson complete sheet
+        showLessonComplete = false
+        
+        // Then dismiss and navigate back to home
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            onDismissToHome()
+        }
+    }
+    
 }
 
 
@@ -299,6 +311,7 @@ struct ExerciseView: View {
             isCompleted: false,
             isUnlocked: true
         ),
-        lessonManager: LessonManager()
+        lessonManager: LessonManager(),
+        onDismissToHome: {}
     )
 }

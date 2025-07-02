@@ -3,9 +3,10 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var lessonManager: LessonManager
     @State private var showWelcomeAnimation = true
+    @State private var navigationPath = NavigationPath()
     
     var body: some View {
-        NavigationView {
+        NavigationStack(path: $navigationPath) {
             ZStack {
                 // Background gradient
                 LinearGradient(
@@ -38,6 +39,15 @@ struct HomeView: View {
                             .foregroundColor(.duolingoOrange)
                     }
                 }
+            }
+            .navigationDestination(for: Lesson.self) { lesson in
+                LessonDetailView(
+                    lesson: lesson,
+                    lessonManager: lessonManager,
+                    onDismissToHome: {
+                        navigationPath = NavigationPath()
+                    }
+                )
             }
         }
     }

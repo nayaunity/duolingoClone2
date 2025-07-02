@@ -1,6 +1,6 @@
 import Foundation
 
-struct ShonaWord: Codable, Identifiable {
+struct ShonaWord: Codable, Identifiable, Hashable {
     let id = UUID()
     let shona: String
     let english: String
@@ -9,7 +9,7 @@ struct ShonaWord: Codable, Identifiable {
     let difficulty: DifficultyLevel
 }
 
-struct ShonaPhrase: Codable, Identifiable {
+struct ShonaPhrase: Codable, Identifiable, Hashable {
     let id = UUID()
     let shona: String
     let english: String
@@ -18,7 +18,7 @@ struct ShonaPhrase: Codable, Identifiable {
     let difficulty: DifficultyLevel
 }
 
-struct Lesson: Codable, Identifiable {
+struct Lesson: Codable, Identifiable, Hashable {
     let id = UUID()
     let title: String
     let description: String
@@ -32,7 +32,7 @@ struct Lesson: Codable, Identifiable {
     var isUnlocked: Bool = false
 }
 
-struct Exercise: Codable, Identifiable {
+struct Exercise: Codable, Identifiable, Hashable {
     let id = UUID()
     let type: ExerciseType
     let question: String
@@ -89,6 +89,11 @@ enum ExerciseType: String, CaseIterable, Codable {
     case fillInBlank = "Fill in the Blank"
     case matchPairs = "Match Pairs"
     case listenAndRepeat = "Listen and Repeat"
+}
+
+// MARK: - Notifications
+extension Notification.Name {
+    static let lessonCompleted = Notification.Name("lessonCompleted")
 }
 
 // MARK: - Exercise Extensions

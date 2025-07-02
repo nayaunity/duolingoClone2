@@ -3,6 +3,7 @@ import SwiftUI
 struct LessonDetailView: View {
     let lesson: Lesson
     @ObservedObject var lessonManager: LessonManager
+    let onDismissToHome: () -> Void
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -88,7 +89,7 @@ struct LessonDetailView: View {
     }
     
     private var startLessonButton: some View {
-        NavigationLink(destination: ExerciseView(lesson: lesson, lessonManager: lessonManager)) {
+        NavigationLink(destination: ExerciseView(lesson: lesson, lessonManager: lessonManager, onDismissToHome: onDismissToHome)) {
             HStack {
                 Spacer()
                 Text(lesson.isCompleted ? "Practice Again" : "Start Lesson")
@@ -125,7 +126,8 @@ struct LessonDetailView: View {
                 isCompleted: false,
                 isUnlocked: true
             ),
-            lessonManager: LessonManager()
+            lessonManager: LessonManager(),
+            onDismissToHome: {}
         )
     }
 }
