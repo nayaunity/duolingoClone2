@@ -33,31 +33,10 @@ struct AudioQualityInfoView: View {
                         )
                         
                         QualityLevelRow(
-                            color: .purple,
-                            label: "AI-SHONA",
-                            title: "Hugging Face Shona AI Model",
-                            description: "State-of-the-art AI model specifically trained on Shona speech - requires API key for full access."
-                        )
-                        
-                        QualityLevelRow(
-                            color: .blue,
-                            label: "SHONA",
-                            title: "Google Translate Shona TTS",
-                            description: "Online text-to-speech specifically trained on Shona language - very authentic."
-                        )
-                        
-                        QualityLevelRow(
-                            color: .orange,
-                            label: "ENHANCED",
-                            title: "African-Optimized TTS",
-                            description: "Uses South African English and other African voices for better pronunciation."
-                        )
-                        
-                        QualityLevelRow(
                             color: .gray,
                             label: "BASIC",
-                            title: "Standard TTS",
-                            description: "Fallback option - not ideal for learning authentic pronunciation."
+                            title: "Standard Device TTS",
+                            description: "Default text-to-speech using device voices."
                         )
                     }
                     
@@ -66,7 +45,7 @@ struct AudioQualityInfoView: View {
                         Text("What You're Getting")
                             .font(.headline)
                         
-                        Text("Most words currently use ENHANCED quality (African-optimized TTS). AI-SHONA quality (Hugging Face model) is available with API authentication for incredibly authentic pronunciation.")
+                        Text("Most words currently use standard device TTS. Add native recordings for authentic pronunciation.")
                             .font(.body)
                             .padding()
                             .background(Color.orange.opacity(0.1))
@@ -90,7 +69,7 @@ struct AudioQualityInfoView: View {
                         Text("Try It Out")
                             .font(.headline)
                         
-                        Text("Tap the speaker icons throughout the app. You'll hear much better pronunciation using African-optimized voices. For incredibly authentic AI-powered Shona, add a Hugging Face API key.")
+                        Text("Tap the speaker icons throughout the app to hear pronunciation using device TTS.")
                             .font(.body)
                         
                         HStack {
