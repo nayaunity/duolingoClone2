@@ -64,3 +64,18 @@ struct TranslationExerciseView: View {
         }
     }
 }
+
+#Preview {
+    let sampleExercise = Exercise(
+        type: .translation,
+        question: "Translate: Hello",
+        correctAnswer: "Mhoro",
+        options: ["Mhoro", "Mangwanani", "Masikati", "Manheru"],
+        shonaText: nil,
+        englishText: nil,
+        audioFileName: nil
+    )
+    
+    TranslationExerciseView(exercise: sampleExercise, selectedAnswer: .constant(""))
+        .padding()
+}

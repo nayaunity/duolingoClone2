@@ -105,3 +105,7 @@ struct HomeView: View {
         }
     }
 }
+
+#Preview {
+    HomeView(lessonManager: LessonManager())
+}

@@ -120,3 +120,8 @@ struct UnitView: View {
         }
     }
 }
+
+#Preview {
+    UnitView(unit: 1, lessonManager: LessonManager())
+        .padding()
+}

@@ -53,3 +53,18 @@ struct FillInBlankExerciseView: View {
         }
     }
 }
+
+#Preview {
+    let sampleExercise = Exercise(
+        type: .fillInBlank,
+        question: "Complete the sentence: _____ means 'good morning' in Shona.",
+        correctAnswer: "Mangwanani",
+        options: nil,
+        shonaText: nil,
+        englishText: nil,
+        audioFileName: nil
+    )
+    
+    FillInBlankExerciseView(exercise: sampleExercise, selectedAnswer: .constant(""))
+        .padding()
+}

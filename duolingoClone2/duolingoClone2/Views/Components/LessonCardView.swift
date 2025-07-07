@@ -56,3 +56,21 @@ struct LessonCardView: View {
         }, perform: {})
     }
 }
+
+#Preview {
+    let sampleLesson = Lesson(
+        title: "Greetings",
+        description: "Learn basic Shona greetings",
+        unit: 1,
+        lessonNumber: 1,
+        words: [],
+        phrases: [],
+        exercises: [],
+        xpReward: 15,
+        isCompleted: false,
+        isUnlocked: true
+    )
+    
+    LessonCardView(lesson: sampleLesson, lessonManager: LessonManager())
+        .padding()
+}

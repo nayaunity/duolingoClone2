@@ -40,3 +40,16 @@ struct PhraseCardView: View {
         .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
     }
 }
+
+#Preview {
+    let samplePhrase = ShonaPhrase(
+        shona: "Mangwanani",
+        english: "Good morning",
+        pronunciation: "Man-gwa-na-ni",
+        context: "Greeting used in the morning",
+        difficulty: .beginner
+    )
+    
+    PhraseCardView(phrase: samplePhrase)
+        .padding()
+}

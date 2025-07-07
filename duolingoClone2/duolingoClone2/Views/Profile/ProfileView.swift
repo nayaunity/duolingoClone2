@@ -77,3 +77,7 @@ struct ProfileView: View {
         .cornerRadius(12)
     }
 }
+
+#Preview {
+    ProfileView(lessonManager: LessonManager())
+}

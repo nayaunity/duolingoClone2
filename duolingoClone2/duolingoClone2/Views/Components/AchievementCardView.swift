@@ -20,3 +20,18 @@ struct AchievementCardView: View {
         .cornerRadius(8)
     }
 }
+
+#Preview {
+    let sampleAchievement = Achievement(
+        title: "First Lesson",
+        description: "Complete your first lesson",
+        iconName: "star.fill",
+        xpRequired: 50,
+        streakRequired: nil,
+        isUnlocked: true,
+        unlockedDate: nil
+    )
+    
+    AchievementCardView(achievement: sampleAchievement)
+        .padding()
+}

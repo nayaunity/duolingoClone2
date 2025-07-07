@@ -161,3 +161,27 @@ struct LessonCompleteView: View {
         }
     }
 }
+
+#Preview {
+    let sampleLesson = Lesson(
+        title: "Greetings",
+        description: "Learn basic Shona greetings",
+        unit: 1,
+        lessonNumber: 1,
+        words: [],
+        phrases: [],
+        exercises: [],
+        xpReward: 50,
+        isCompleted: false,
+        isUnlocked: true
+    )
+    
+    LessonCompleteView(
+        lesson: sampleLesson,
+        correctAnswers: 8,
+        totalQuestions: 10,
+        lessonManager: LessonManager()
+    ) {
+        // Dismiss action
+    }
+}

@@ -18,3 +18,8 @@ struct StatRowView: View {
         }
     }
 }
+
+#Preview {
+    StatRowView(icon: "⭐", title: "Total XP", value: "1,250")
+        .padding()
+}

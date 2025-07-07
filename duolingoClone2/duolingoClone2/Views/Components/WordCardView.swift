@@ -33,3 +33,16 @@ struct WordCardView: View {
         .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
     }
 }
+
+#Preview {
+    let sampleWord = ShonaWord(
+        shona: "Mhoro",
+        english: "Hello",
+        pronunciation: "M-ho-ro",
+        category: .greetings,
+        difficulty: .beginner
+    )
+    
+    WordCardView(word: sampleWord)
+        .padding()
+}

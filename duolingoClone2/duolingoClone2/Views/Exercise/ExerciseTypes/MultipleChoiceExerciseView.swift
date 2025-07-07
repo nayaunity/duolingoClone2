@@ -45,3 +45,18 @@ struct MultipleChoiceExerciseView: View {
         }
     }
 }
+
+#Preview {
+    let sampleExercise = Exercise(
+        type: .multipleChoice,
+        question: "What does 'Mhoro' mean?",
+        correctAnswer: "Hello",
+        options: ["Hello", "Goodbye", "Thank you", "Please"],
+        shonaText: nil,
+        englishText: nil,
+        audioFileName: nil
+    )
+    
+    MultipleChoiceExerciseView(exercise: sampleExercise, selectedAnswer: .constant(""))
+        .padding()
+}

@@ -29,3 +29,18 @@ struct ListenAndRepeatExerciseView: View {
         }
     }
 }
+
+#Preview {
+    let sampleExercise = Exercise(
+        type: .listenAndRepeat,
+        question: "Listen and repeat the Shona word",
+        correctAnswer: "Mhoro",
+        options: nil,
+        shonaText: "Mhoro",
+        englishText: "Hello",
+        audioFileName: nil
+    )
+    
+    ListenAndRepeatExerciseView(exercise: sampleExercise, selectedAnswer: .constant(""))
+        .padding()
+}
