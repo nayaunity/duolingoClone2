@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Duolingo Colors
 extension Color {
-    static let duolingoGreen = Color(red: 88/255, green: 204/255, blue: 2/255)
+    static let duolingoGreen = Color(red: 220/255, green: 38/255, blue: 38/255)
     static let duolingoBlue = Color(red: 28/255, green: 176/255, blue: 246/255)
     static let duolingoRed = Color(red: 255/255, green: 77/255, blue: 77/255)
     static let duolingoYellow = Color(red: 255/255, green: 205/255, blue: 0/255)
